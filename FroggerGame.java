@@ -21,6 +21,8 @@ public class FroggerGame extends JFrame{
 class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
  public static final int INTRO=0, GAME=1, END=2;
  private int screen = INTRO;
+ public static final int lanes_wide = 16;
+ public static final int lanes_tall = 12;
  
  private boolean []keys;
  Timer timer;

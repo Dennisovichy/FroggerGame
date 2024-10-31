@@ -23,6 +23,7 @@ class Frog{
     this.hitbox = new Rectangle(x,y,50,50);
   }
   public Rectangle getHitbox(){return this.hitbox;}
+  public boolean isJumping(){return this.jumping;}
   public void draw(Graphics g){
     g.drawImage(this.frog_image, this.x, this.y, null);
   }

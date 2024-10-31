@@ -20,6 +20,8 @@ class HazardSpawner{
     
   }
 
+  public int[] getCarLanes(){return this.lanes;}
+
   public void update(){
     int x_pos = -200;
     for(int i = 0; i < this.lanes.length; i++){
