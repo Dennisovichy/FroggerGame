@@ -22,33 +22,40 @@ class Frog{
   public Frog(){
     this.hitbox = new Rectangle(x,y,50,50);
   }
+
   public Rectangle getHitbox(){return this.hitbox;}
   public boolean isJumping(){return this.jumping;}
+  public int getY(){return this.y;}
+
   public void draw(Graphics g){
     g.drawImage(this.frog_image, this.x, this.y, null);
   }
   public boolean move(boolean[] keys, int left, int right, int up, int down){
     if (this.jumping){
-      if(this.direction == LEFT){
-        this.x -= SPEED;
-        this.hitbox.x -= SPEED;
-        this.traveled_x += SPEED;
-      }
-      else if(this.direction == RIGHT){
-        this.x += SPEED;
-        this.hitbox.x += SPEED;
-        this.traveled_x += SPEED;
-      }
-      else if(this.direction == UP){
-        this.y -= SPEED;
-        this.hitbox.y -= SPEED;
-        this.traveled_y += SPEED;
-      }
-      else if(this.direction == DOWN){
-        this.y += SPEED;
-        this.hitbox.y += SPEED;
-        this.traveled_y += SPEED;
-      }
+        switch (this.direction) {
+            case LEFT:
+                this.x -= SPEED;
+                this.hitbox.x -= SPEED;
+                this.traveled_x += SPEED;
+                break;
+            case RIGHT:
+                this.x += SPEED;
+                this.hitbox.x += SPEED;
+                this.traveled_x += SPEED;
+                break;
+            case UP:
+                this.y -= SPEED;
+                this.hitbox.y -= SPEED;
+                this.traveled_y += SPEED;
+                break;
+            case DOWN:
+                this.y += SPEED;
+                this.hitbox.y += SPEED;
+                this.traveled_y += SPEED;
+                break;
+            default:
+                break;
+        }
       if(this.traveled_x >= 50 || this.traveled_y >= 50){
         this.jumping = false;
         this.traveled_x = 0;

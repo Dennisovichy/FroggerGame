@@ -30,8 +30,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  private Frog ball; 
  private HazardManager car_manager;
  private HazardSpawner car_spawner;
- private MotorVehicle car;
- private MotorVehicle car2;
+ private Map map1;
+ private Level level1;
  
  public GamePanel(){
   /* Java graphics started with a slow Internet in mind. There was a simple
@@ -44,14 +44,16 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   ball = new Frog();
   car_manager = new HazardManager();
   
-  
-  int[] lanes = {3,7};
+  int[] lanes = {5,7};
   int[][] delays = {{80}, {20,60}};
   int[] types = {0, 1};
   int[] directions = {MotorVehicle.LEFT, MotorVehicle.RIGHT};
   car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager);
   car_manager.addMotorVehicle(0, 0, 300, MotorVehicle.RIGHT);
   car_manager.addMotorVehicle(1, 700, 150, MotorVehicle.LEFT);
+
+  map1 = new Map(4,car_manager, car_spawner);
+  level1 = new Level(map1);
   
   setPreferredSize(new Dimension(800, 600));
   setFocusable(true);
@@ -67,9 +69,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
    
   }
   else if(screen == GAME){
-   ball.move(keys, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN);
-   car_manager.moveMotorVehicles();
-   car_spawner.update();
+   level1.update(keys, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN);
   }
 
  }
@@ -124,12 +124,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
    // The last parameter is an ImageObserver. Back when images were not loaded
    // right away you would specify what object would be notified when it was loaded.
    // We are not doing that, so null will always be fine.
-   g.drawImage(back, 0, 0, null);
-   ball.draw(g);
+   level1.draw(g);
    //Graphics2D g2 = (Graphics2D)g;
    //g2.draw(ball.getHitbox());
-   car_manager.drawMotorVehicles(g);
-   CollisionChecker.checkCollision(ball, car_manager);
    //System.out.println(car_manager.getMotorVehicle(0).getHitbox().height);
   }
     }
