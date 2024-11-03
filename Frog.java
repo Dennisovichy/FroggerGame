@@ -30,6 +30,10 @@ class Frog{
   public void draw(Graphics g){
     g.drawImage(this.frog_image, this.x, this.y, null);
   }
+  public void moveLog(int x){
+    this.x += x;
+    this.hitbox.x += x;
+  }
   public boolean move(boolean[] keys, int left, int right, int up, int down){
     if (this.jumping){
         switch (this.direction) {

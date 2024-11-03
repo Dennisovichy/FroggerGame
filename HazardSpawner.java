@@ -8,8 +8,9 @@ class HazardSpawner{
   private int[] enemy_types;
   private int[] directions;
   private HazardManager manager;
+  private boolean[] loglanes;
   
-  public HazardSpawner(int[] lanes, int[][] delays, int[] enemy_types, int[] directions, HazardManager manager){
+  public HazardSpawner(int[] lanes, int[][] delays, int[] enemy_types, int[] directions, HazardManager manager, boolean[] logs){
     this.timers = new int[lanes.length];
     this.delay_positions = new int[lanes.length];
     this.delays = delays;
@@ -17,7 +18,7 @@ class HazardSpawner{
     this.enemy_types = enemy_types;
     this.directions = directions;
     this.manager = manager;
-    
+    this.loglanes = logs;
   }
 
   public int[] getCarLanes(){return this.lanes;}
@@ -32,7 +33,12 @@ class HazardSpawner{
         else if(this.directions[i] == MotorVehicle.RIGHT){
           x_pos = -300;
         }
-        manager.addMotorVehicle(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
+        if(this.loglanes[i]){
+          manager.addLog(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
+        }
+        else{
+          manager.addMotorVehicle(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
+        }
         this.delay_positions[i] = Helper.advanceArray(this.delays[i], this.delay_positions[i]);
         this.timers[i] = this.delays[i][this.delay_positions[i]];
       }

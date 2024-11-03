@@ -21,6 +21,11 @@ class HazardManager{
     MotorVehicle car = new MotorVehicle(car_type, x, y, direction);
     vehicles_list.add(car);
   }
+
+  public void addLog(int log_type, int x, int y, int direction){
+    MotorVehicle log = new MotorVehicle(log_type, x, y, direction, "this is a log");
+    vehicles_list.add(log);
+  }
   
   public void moveMotorVehicles(){
     for(int i = 0; i < vehicles_list.size(); i++){
@@ -38,7 +43,7 @@ class HazardManager{
     for(int i = 0; i < vehicles_list.size(); i++){
       
       g.drawImage(vehicles_list.get(i).getImage(), vehicles_list.get(i).getX(), vehicles_list.get(i).getY(), null);
-      //g.setColor(Color.RED);
+      g.setColor(Color.RED);
       //Graphics2D g2 = (Graphics2D)g;
       //g2.draw(vehicles_list.get(i).getHitbox());
     }

@@ -18,7 +18,9 @@ class Map{
       this.lanes[i] = 1;
     }
     for(int lane: spawner.getCarLanes()){
+      if(lane>waterlanes){
         this.lanes[lane-1] = 2;
+      }
     }
     this.car_manager = manage;
     this.car_spawner = spawner;

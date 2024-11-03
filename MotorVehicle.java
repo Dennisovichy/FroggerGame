@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.Image;
 import javax.swing.*;
 
 class MotorVehicle{
@@ -8,6 +7,9 @@ class MotorVehicle{
   private static int[] car_speeds = {5,8};
   public static int RIGHT = 1;
   public static int LEFT = 0;
+  private static Image[] log_images = {new ImageIcon("log.jpg").getImage()};
+  private static int[][] log_sizes = {{300, 50}};
+  private static int[] log_speeds = {2};
   
   private int car_type;
   private Rectangle hitbox;
@@ -16,6 +18,7 @@ class MotorVehicle{
   private int direction;
   private int x;
   private int y;
+  private boolean is_log;
   
   public MotorVehicle(int car_type, int x, int y, int direction){
     this.car_type = car_type;
@@ -25,12 +28,32 @@ class MotorVehicle{
     this.y = y;
     this.direction = direction;
     this.hitbox = new Rectangle(x,y,car_sizes[car_type][0], car_sizes[car_type][1]);
+    this.is_log = false;
+  }
+
+  public MotorVehicle(int car_type, int x, int y, int direction, String log_status){
+    this.car_type = car_type;
+    this.image = log_images[car_type].getScaledInstance(log_sizes[car_type][0], log_sizes[car_type][1], Image.SCALE_DEFAULT);
+    this.speed = log_speeds[car_type];
+    this.x = x;
+    this.y = y;
+    this.direction = direction;
+    this.hitbox = new Rectangle(x,y,log_sizes[car_type][0], log_sizes[car_type][1]);
+    this.is_log = true;
+  }
+
+  public boolean isLog(){return this.is_log;}
+  public int getSpeed(){
+    if(this.direction == LEFT){
+      return -this.speed;
+    }
+    return this.speed;
   }
   
   public Image getImage(){return this.image;}
   public int getX(){return this.x;}
   public int getY(){return this.y;}
-  public Rectangle getHitbox(){return new Rectangle(x,y,car_sizes[car_type][0], car_sizes[car_type][1]);}
+  public Rectangle getHitbox(){return this.hitbox;}
   
   public void move(){
     if(this.direction == RIGHT){
@@ -59,8 +82,8 @@ class MotorVehicle{
   
   public void draw(Graphics g){
     g.drawImage(this.image, this.x, this.y, null);
-    g.setColor(new Color(137,196,234));
-    g.fillRect(this.hitbox.x,this.hitbox.y,this.hitbox.width,this.hitbox.height); 
+    Graphics2D g2 = (Graphics2D)g;
+    g2.draw(this.hitbox);
   }
   
 }

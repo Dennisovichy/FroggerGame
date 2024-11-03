@@ -12,7 +12,7 @@ class Level{
     public void update(boolean[] keys, int left, int right, int up, int down){
         this.ball.move(keys, left, right, up, down);
         this.level_map.updateMap();
-        CollisionChecker.checkDrown(ball, level_map);
+        CollisionChecker.checkDrown(ball, level_map, level_map.getHazards());
         if(CollisionChecker.checkCollision(this.ball, this.level_map.getHazards())){
             this.ball = new Frog();
         }
