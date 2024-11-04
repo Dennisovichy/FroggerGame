@@ -9,8 +9,9 @@ class HazardSpawner{
   private int[] directions;
   private HazardManager manager;
   private boolean[] loglanes;
+  private boolean[] turtlanes;
   
-  public HazardSpawner(int[] lanes, int[][] delays, int[] enemy_types, int[] directions, HazardManager manager, boolean[] logs){
+  public HazardSpawner(int[] lanes, int[][] delays, int[] enemy_types, int[] directions, HazardManager manager, boolean[] logs, boolean[] turts){
     this.timers = new int[lanes.length];
     this.delay_positions = new int[lanes.length];
     this.delays = delays;
@@ -19,6 +20,7 @@ class HazardSpawner{
     this.directions = directions;
     this.manager = manager;
     this.loglanes = logs;
+    this.turtlanes = turts;
   }
 
   public int[] getCarLanes(){return this.lanes;}
@@ -35,6 +37,9 @@ class HazardSpawner{
         }
         if(this.loglanes[i]){
           manager.addLog(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
+        }
+        else if(this.turtlanes[i]){
+          manager.addTurt(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
         }
         else{
           manager.addMotorVehicle(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);

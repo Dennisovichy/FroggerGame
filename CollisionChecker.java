@@ -5,7 +5,7 @@ class CollisionChecker{
     Rectangle frogbox = frog.getHitbox();
     for(int i = 0; i < hazard_list.getNumMotorVehicle(); i++){
       if(frogbox.intersects(hazard_list.getMotorVehicle(i).getHitbox())){
-        if(hazard_list.getMotorVehicle(i).isLog() == false){
+        if(hazard_list.getMotorVehicle(i).isLog() == false && hazard_list.getMotorVehicle(i).isTurtle() == false){
           System.out.println("You have died");
           return true;
         }
@@ -18,7 +18,7 @@ class CollisionChecker{
       return false;
     }
 
-    Rectangle frogbox = frog.getHitbox();
+    Rectangle frogbox = frog.getSmallbox();
     for(int i = 0; i < hazard_list.getNumMotorVehicle(); i++){
       if(hazard_list.getMotorVehicle(i).isLog() == true){
         if(frogbox.intersects(hazard_list.getMotorVehicle(i).getHitbox())){

@@ -44,12 +44,13 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   ball = new Frog();
   car_manager = new HazardManager();
   
-  int[] lanes = {2,5,7};
-  int[][] delays = {{300},{80}, {20,60}};
-  int[] types = {0,0, 1};
-  int[] directions = {MotorVehicle.RIGHT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
-  boolean[] logs = {true, false, false};
-  car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager, logs);
+  int[] lanes = {2,3,5,7};
+  int[][] delays = {{300},{120},{80}, {20,60}};
+  int[] types = {0,0,0, 1};
+  int[] directions = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
+  boolean[] logs = {true, false,false, false};
+  boolean[] turts = {false,true,false,false};
+  car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager, logs, turts);
   car_manager.addMotorVehicle(0, 0, 300, MotorVehicle.RIGHT);
   car_manager.addMotorVehicle(1, 700, 150, MotorVehicle.LEFT);
 

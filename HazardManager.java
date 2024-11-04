@@ -26,6 +26,11 @@ class HazardManager{
     MotorVehicle log = new MotorVehicle(log_type, x, y, direction, "this is a log");
     vehicles_list.add(log);
   }
+
+  public void addTurt(int log_type, int x, int y, int direction){
+    MotorVehicle turt = new MotorVehicle(log_type, x, y, direction, "this is a log", "this is a turtle");
+    vehicles_list.add(turt);
+  }
   
   public void moveMotorVehicles(){
     for(int i = 0; i < vehicles_list.size(); i++){

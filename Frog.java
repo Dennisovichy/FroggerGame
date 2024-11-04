@@ -24,6 +24,7 @@ class Frog{
   }
 
   public Rectangle getHitbox(){return this.hitbox;}
+  public Rectangle getSmallbox(){return new Rectangle(x+24,y+24,1,1);}
   public boolean isJumping(){return this.jumping;}
   public int getY(){return this.y;}
 
