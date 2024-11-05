@@ -53,7 +53,7 @@ class Map{
   }
 
   public void drawMap(Graphics g){
-    g.drawImage(this.back, 0, 0, null);
+    //g.drawImage(this.back, 0, 0, null);
     for(int i = 0; i<this.lanes.length;i++){
       for(int x = 0; x<16; x++){
         if(this.lanes[i] == 0){

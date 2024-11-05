@@ -124,7 +124,7 @@ class MotorVehicle{
       }
     }
     else if (this.direction == LEFT){
-      if(this.x < -200){
+      if(this.x < -400){
         return true;
       }
     }

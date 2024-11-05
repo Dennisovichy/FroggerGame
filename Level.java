@@ -34,6 +34,7 @@ class Level{
     }
     public int getLives(){return this.lives;}
     public int getScore(){return this.score;}
+    public void clearHazards(){this.level_map.getHazards().clearMotorVehicles();}
 
     public void draw(Graphics g){
         this.level_map.drawMap(g);
