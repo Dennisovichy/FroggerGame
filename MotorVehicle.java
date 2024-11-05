@@ -5,14 +5,14 @@ import javax.swing.*;
 class MotorVehicle{
   private static Image[] car_images = {new ImageIcon("test_car.jpg").getImage(),new ImageIcon("test_car2.jpg").getImage()};
   private static int[][] car_sizes = {{100,50},{100,50}};
-  private static int[] car_speeds = {5,8};
+  private static int[] car_speeds = {5,20};
 
   public static int RIGHT = 1;
   public static int LEFT = 0;
 
-  private static Image[] log_images = {new ImageIcon("log.jpg").getImage()};
-  private static int[][] log_sizes = {{300, 50}};
-  private static int[] log_speeds = {2};
+  private static Image[] log_images = {new ImageIcon("log.jpg").getImage(),new ImageIcon("log.jpg").getImage(),new ImageIcon("log.jpg").getImage()};
+  private static int[][] log_sizes = {{300, 50},{200, 50},{100, 50}};
+  private static int[] log_speeds = {2,4,7};
 
   private static Image[] turtle_images = {new ImageIcon("turt.jpg").getImage()};
   private static int[][] turt_sizes = {{200,50}};
@@ -47,13 +47,15 @@ class MotorVehicle{
   }
 
   public MotorVehicle(int car_type, int x, int y, int direction, String log_status){
+    Random r = new Random();
     this.car_type = car_type;
-    this.image = log_images[car_type].getScaledInstance(log_sizes[car_type][0], log_sizes[car_type][1], Image.SCALE_DEFAULT);
+    int select = r.nextInt(0, this.log_images.length);
+    this.image = log_images[select].getScaledInstance(log_sizes[select][0], log_sizes[select][1], Image.SCALE_DEFAULT);
     this.speed = log_speeds[car_type];
     this.x = x;
     this.y = y;
     this.direction = direction;
-    this.hitbox = new Rectangle(x,y,log_sizes[car_type][0], log_sizes[car_type][1]);
+    this.hitbox = new Rectangle(x,y,log_sizes[select][0], log_sizes[select][1]);
     this.is_log = true;
   }
 

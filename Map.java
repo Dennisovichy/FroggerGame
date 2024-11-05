@@ -3,7 +3,7 @@ import java.util.*;
 import javax.swing.*;
 
 class Map{
-  private int[] lanes = new int[12];
+  private int[] lanes = new int[15];
   private ArrayList<Cave> caves;
   private int waterlanes;
   private HazardManager car_manager;
@@ -13,6 +13,7 @@ class Map{
   private Image gras_image = new ImageIcon("gras.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
   private Image road_image = new ImageIcon("road.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
   private Image cave_image = new ImageIcon("cave.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+  private Image frog_image = new ImageIcon("frog_real.png").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
 
   public Map(int waterlanes, HazardManager manage, HazardSpawner spawner){
     this.waterlanes = waterlanes;
@@ -34,11 +35,21 @@ class Map{
   }
 
   public HazardManager getHazards(){return this.car_manager;}
+  public ArrayList<Cave> getCaves(){return this.caves;}
   public int getWater(){return this.waterlanes;}
 
   public void updateMap(){
     this.car_manager.moveMotorVehicles();
     this.car_spawner.update();
+  }
+
+  public boolean checkCleared(){
+    for(Cave cave: caves){
+      if(!cave.getOccupied()){
+        return false;
+      }
+    }
+    return true;
   }
 
   public void drawMap(Graphics g){
@@ -58,6 +69,9 @@ class Map{
     }
     for(int x = 0; x<5; x++){
       g.drawImage(cave_image, caves.get(x).getX(), caves.get(x).getY(), null);
+      if(caves.get(x).getOccupied()){
+        g.drawImage(frog_image, caves.get(x).getX(), caves.get(x).getY(), null);
+      }
     }
     car_manager.drawMotorVehicles(g);
   }
@@ -71,10 +85,12 @@ class Cave{
   public Cave(int x){
     this.x = x;
     this.y = 0;
-    hitbox = new Rectangle(this.x, this.y, 50, 50);
+    hitbox = new Rectangle(this.x+20, this.y+20, 10, 10);
   }
 
   public int getX(){return this.x;}
   public int getY(){return this.y;}
+  public boolean getOccupied(){return this.occupied;}
+  public void setOccupied(){this.occupied = true;}
   public Rectangle getHitbox(){return this.hitbox;}
 }

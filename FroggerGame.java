@@ -22,7 +22,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  public static final int INTRO=0, GAME=1, END=2;
  private int screen = INTRO;
  public static final int lanes_wide = 16;
- public static final int lanes_tall = 12;
+ public static final int lanes_tall = 15;
  
  private boolean []keys;
  Timer timer;
@@ -32,6 +32,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  private HazardSpawner car_spawner;
  private Map map1;
  private Level level1;
+ public int lives;
+ public int score;
  
  public GamePanel(){
   /* Java graphics started with a slow Internet in mind. There was a simple
@@ -53,11 +55,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager, logs, turts);
   car_manager.addMotorVehicle(0, 0, 300, MotorVehicle.RIGHT);
   car_manager.addMotorVehicle(1, 700, 150, MotorVehicle.LEFT);
+  lives = 5;
+  score = 0;
+  int[] data_go = {lives,score};
 
   map1 = new Map(4,car_manager, car_spawner);
-  level1 = new Level(map1);
+  level1 = new Level(map1, data_go);
   
-  setPreferredSize(new Dimension(800, 600));
+  setPreferredSize(new Dimension(800, 750));
   setFocusable(true);
   requestFocus();
   addKeyListener(this);
@@ -72,6 +77,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   }
   else if(screen == GAME){
    level1.update(keys, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN);
+   System.out.println(level1.getLives());
   }
 
  }

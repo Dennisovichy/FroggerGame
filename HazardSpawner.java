@@ -1,4 +1,4 @@
-
+import java.util.*;
 
 class HazardSpawner{
   private int[] lanes;
@@ -26,6 +26,7 @@ class HazardSpawner{
   public int[] getCarLanes(){return this.lanes;}
 
   public void update(){
+    Random r = new Random();
     int x_pos = -200;
     for(int i = 0; i < this.lanes.length; i++){
       if(this.timers[i] == 0){
@@ -45,7 +46,12 @@ class HazardSpawner{
           manager.addMotorVehicle(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
         }
         this.delay_positions[i] = Helper.advanceArray(this.delays[i], this.delay_positions[i]);
-        this.timers[i] = this.delays[i][this.delay_positions[i]];
+        if(this.loglanes[i]){
+          this.timers[i] = (int)(this.delays[i][this.delay_positions[i]]*(1-r.nextDouble(0.5)));
+        }
+        else{
+          this.timers[i] = this.delays[i][this.delay_positions[i]];
+        }
       }
       else{
         this.timers[i] -= 1;

@@ -8,6 +8,10 @@ class HazardManager{
   public HazardManager(){
     
   }
+
+  public void clearMotorVehicles(){
+    this.vehicles_list.clear();
+  }
   
   public int getNumMotorVehicle(){
     return vehicles_list.size();

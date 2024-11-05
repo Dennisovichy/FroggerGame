@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.*;
 
 class CollisionChecker{
   public static boolean checkCollision(Frog frog, HazardManager hazard_list){
@@ -34,6 +35,22 @@ class CollisionChecker{
       return true;
     }
     
+    return false;
+  }
+  public static boolean checkSafe(Frog frog, ArrayList<Cave> caves){
+    if(frog.isJumping()){
+      return false;
+    }
+    Rectangle frogbox = frog.getSmallbox();
+    for(int i = 0; i<5; i++){
+      if(!caves.get(i).getOccupied()){
+        if(frogbox.intersects(caves.get(i).getHitbox())){
+          System.out.println("Safe");
+          caves.get(i).setOccupied();
+          return true;
+        }
+      }
+    }
     return false;
   }
 }
