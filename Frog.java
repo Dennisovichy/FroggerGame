@@ -90,6 +90,7 @@ class Frog{
                 break;
         }
       if(this.traveled_x >= 50 || this.traveled_y >= 50){
+        this.frog_image = Helper.rotateImage(frog_image, 90);
         this.jumping = false;
         this.traveled_x = 0;
         this.traveled_y = 0;
