@@ -30,6 +30,7 @@ class MotorVehicle{
 
   private boolean is_log;
   private boolean is_turtle = false;
+  private boolean is_frog = false;
   private int dive_counter;
   private int rise_counter;
   private int ticker;
@@ -59,6 +60,19 @@ class MotorVehicle{
     this.is_log = true;
   }
 
+  public MotorVehicle(int car_type, int x, int y, int direction, boolean frog_status){
+    Random r = new Random();
+    this.car_type = car_type;
+    this.image = new ImageIcon("poorfrog.jpg").getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT);
+    this.speed = log_speeds[car_type];
+    this.x = x+10;
+    this.y = y+10;
+    this.direction = direction;
+    this.hitbox = new Rectangle(this.x,this.y,30, 30);
+    this.is_log = false;
+    this.is_frog = true;
+  }
+
   public MotorVehicle(int car_type, int x, int y, int direction, String log_status, String turtle_status){
     this.car_type = car_type;
     this.image = turtle_images[car_type].getScaledInstance(turt_sizes[car_type][0], turt_sizes[car_type][1], Image.SCALE_DEFAULT);
@@ -77,6 +91,7 @@ class MotorVehicle{
 
   public boolean isLog(){return this.is_log;}
   public boolean isTurtle(){return this.is_turtle;}
+  public boolean isFrog(){return this.is_frog;}
   public int getSpeed(){
     if(this.direction == LEFT){
       return -this.speed;

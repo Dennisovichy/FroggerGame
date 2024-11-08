@@ -1,10 +1,10 @@
 import java.awt.*;
 
 class Level{
-    Map level_map;
-    Frog ball;
-    int lives;
-    int score;
+    private Map level_map;
+    private Frog ball;
+    private int lives;
+    private int score;
 
     public Level(Map layout, int[] data){
         this.level_map = layout;
@@ -16,7 +16,9 @@ class Level{
     public void update(boolean[] keys, int left, int right, int up, int down){
         this.ball.move(keys, left, right, up, down);
         this.level_map.updateMap();
-        if(CollisionChecker.checkSafe(ball, this.level_map.getCaves())){
+        this.score += this.ball.getPoints();
+        CollisionChecker.checkRescue(ball, level_map.getHazards());
+        if(CollisionChecker.checkSafe(ball, this.level_map.getCaves(),this)){
             this.ball = new Frog();
         }
         if(CollisionChecker.checkDrown(ball, level_map, level_map.getHazards())){
@@ -34,6 +36,7 @@ class Level{
     }
     public int getLives(){return this.lives;}
     public int getScore(){return this.score;}
+    public void addScore(int score){this.score += score;}
     public void clearHazards(){this.level_map.getHazards().clearMotorVehicles();}
 
     public void draw(Graphics g){

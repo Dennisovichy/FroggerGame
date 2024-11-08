@@ -20,10 +20,19 @@ class HazardManager{
   public MotorVehicle getMotorVehicle(int pos){
     return vehicles_list.get(pos);
   }
+
+  public void killMotorVehicle(int pos){
+    this.vehicles_list.remove(pos);
+  }
   
   public void addMotorVehicle(int car_type, int x, int y, int direction){
     MotorVehicle car = new MotorVehicle(car_type, x, y, direction);
     vehicles_list.add(car);
+  }
+
+  public void addFrog(int log_type, int x, int y, int direction){
+    MotorVehicle frog = new MotorVehicle(log_type, x, y, direction, true);
+    vehicles_list.add(frog);
   }
 
   public void addLog(int log_type, int x, int y, int direction){
@@ -46,6 +55,15 @@ class HazardManager{
         x = 0;
       }
     }
+  }
+
+  public boolean poorfrogExist(){
+    for(int i = 0; i < vehicles_list.size(); i++){
+      if(vehicles_list.get(i).isFrog()){
+        return true;
+      }
+    }
+    return false;
   }
   
   public void drawMotorVehicles(Graphics g){

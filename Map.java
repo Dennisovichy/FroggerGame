@@ -14,8 +14,17 @@ class Map{
   private Image road_image = new ImageIcon("road.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
   private Image cave_image = new ImageIcon("cave.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
   private Image frog_image = new ImageIcon("frog_real.png").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
+  private Image fly_image = new ImageIcon("fly.jpg").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
+  private int fly_timer = 20;
+  private int ticker = 0;
+  private boolean fly_spawned = false;
+  private int poorfrog_timer = 20;
+  private int frog_ticker = 0;
+  public boolean poorfrog_spawned = false;
+  private int fly_location;
 
-  public Map(int waterlanes, HazardManager manage, HazardSpawner spawner){
+
+  public Map(int waterlanes, HazardManager manage, HazardSpawner spawner, boolean gator){
     this.waterlanes = waterlanes;
     this.caves = new ArrayList<Cave>();
     for(int i = 0; i<5; i++){
@@ -39,6 +48,30 @@ class Map{
   public int getWater(){return this.waterlanes;}
 
   public void updateMap(){
+    this.ticker++;
+    if(this.ticker >= this.fly_timer){
+      if(!fly_spawned){
+        this.fly_location = pickCave();
+        caves.get(this.fly_location).fly_present = true;
+        fly_spawned = true;
+      }
+      else if(fly_spawned){
+        caves.get(this.fly_location).fly_present = false;
+        fly_spawned = false;
+      }
+      this.ticker = 0;
+    }
+    this.poorfrog_spawned = this.car_manager.poorfrogExist();
+    if(!this.poorfrog_spawned){
+      this.frog_ticker++;
+      if(this.frog_ticker>=this.poorfrog_timer){
+        this.car_spawner.SpawnFrog();
+        //this.poorfrog_spawned = true;
+        this.frog_ticker = 0;
+      }
+    }
+    
+    
     this.car_manager.moveMotorVehicles();
     this.car_spawner.update();
   }
@@ -50,6 +83,17 @@ class Map{
       }
     }
     return true;
+  }
+
+  private int pickCave(){
+    ArrayList<Integer> options = new ArrayList<Integer>();
+    for(int i = 0; i<5;i++){
+      if(!caves.get(i).getOccupied()){
+        options.add(i);
+      }
+    }
+    Random r = new Random();
+    return options.get(r.nextInt(0, options.size()));
   }
 
   public void drawMap(Graphics g){
@@ -72,6 +116,9 @@ class Map{
       if(caves.get(x).getOccupied()){
         g.drawImage(frog_image, caves.get(x).getX(), caves.get(x).getY(), null);
       }
+      if(caves.get(x).fly_present){
+        g.drawImage(fly_image, caves.get(x).getX(), caves.get(x).getY(), null);
+      }
     }
     car_manager.drawMotorVehicles(g);
   }
@@ -79,13 +126,14 @@ class Map{
 
 class Cave{
   private boolean occupied = false;
+  public boolean fly_present = false;
   private Rectangle hitbox;
   private int x,y;
 
   public Cave(int x){
     this.x = x;
     this.y = 0;
-    hitbox = new Rectangle(this.x+20, this.y+20, 10, 10);
+    hitbox = new Rectangle(this.x+15, this.y+15, 20, 20);
   }
 
   public int getX(){return this.x;}

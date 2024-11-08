@@ -1,7 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
+import java.awt.image.*; 
+import java.io.*; 
+import javax.imageio.*; 
+import java.util.ArrayList; 
+import java.awt.geom.*;
 
 public class FroggerGame extends JFrame{
  GamePanel game= new GamePanel();
@@ -36,6 +40,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  private ArrayList<Map> maps;
  public int lives;
  public int score;
+ File fntFile = new File("VCR_OCD_MONO_1.001.ttf");
+ Font score_font = new Font("Comic Sans MS", Font.PLAIN, 30);
  
  public GamePanel(){
   /* Java graphics started with a slow Internet in mind. There was a simple
@@ -56,7 +62,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   boolean[] logs = {true, false,true,false, false};
   boolean[] turts = {false,true,false,false,false};
   HazardSpawner car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager, logs, turts);
-  Map map1 = new Map(4,car_manager, car_spawner);
+  Map map1 = new Map(4,car_manager, car_spawner,false);
 
   int[] lanes2 = {2,3,4,5,7};
   int[][] delays2 = {{300},{120},{400},{80}, {20,60}};
@@ -65,7 +71,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   boolean[] logs2 = {true, false,true,false, false};
   boolean[] turts2 = {false,true,false,false,false};
   HazardSpawner car_spawner2 = new HazardSpawner(lanes2, delays2, types2, directions2, car_manager, logs2, turts2);
-  Map map2 = new Map(4,car_manager, car_spawner2);
+  Map map2 = new Map(4,car_manager, car_spawner2,true);
 
   int[] lanes3 = {2,3,4,5,7};
   int[][] delays3 = {{300},{120},{400},{80}, {20,60}};
@@ -74,7 +80,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   boolean[] logs3 = {true, false,true,false, false};
   boolean[] turts3 = {false,true,false,false,false};
   HazardSpawner car_spawner3 = new HazardSpawner(lanes3, delays3, types3, directions3, car_manager, logs3, turts3);
-  Map map3 = new Map(4,car_manager, car_spawner3);
+  Map map3 = new Map(4,car_manager, car_spawner3,true);
   lives = 5;
   score = 0;
   int[] data_go = {lives,score};
@@ -166,6 +172,9 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
    for(int i = 0; i<level1.getLives(); i++){
     g.drawImage(frog_icon, 50+i*40, 752, null);
    }
+   g.setColor(new Color(255,255,255));
+   g.setFont(score_font);
+   g.drawString("Score:"+level1.getScore(), 600, 775);
    //Graphics2D g2 = (Graphics2D)g;
    //g2.draw(ball.getHitbox());
    //System.out.println(car_manager.getMotorVehicle(0).getHitbox().height);
