@@ -15,13 +15,19 @@ class Map{
   private Image cave_image = new ImageIcon("cave.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
   private Image frog_image = new ImageIcon("frog_real.png").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
   private Image fly_image = new ImageIcon("fly.jpg").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
-  private int fly_timer = 20;
+  private Image gator_image = new ImageIcon("gator.jpg").getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT);
+  private int fly_timer = 100;
   private int ticker = 0;
   private boolean fly_spawned = false;
   private int poorfrog_timer = 20;
   private int frog_ticker = 0;
   public boolean poorfrog_spawned = false;
   private int fly_location;
+  private int gator_timer = 200;
+  private int gator_ticker = 0;
+  private boolean gator_spawned = false;
+  private int gator_location;
+  private boolean gator_status = false;
 
 
   public Map(int waterlanes, HazardManager manage, HazardSpawner spawner, boolean gator){
@@ -40,7 +46,15 @@ class Map{
     }
     this.car_manager = manage;
     this.car_spawner = spawner;
+    this.gator_status = gator;
     System.out.println(Arrays.toString(this.lanes));
+  }
+
+  public void clearCaves(){
+    this.caves.clear();
+    for(int i = 0; i<5; i++){
+      this.caves.add(new Cave(80+i*160));
+    }
   }
 
   public HazardManager getHazards(){return this.car_manager;}
@@ -60,6 +74,21 @@ class Map{
         fly_spawned = false;
       }
       this.ticker = 0;
+    }
+    if(this.gator_status){
+      this.gator_ticker++;
+      if(this.gator_ticker >= this.gator_timer){
+        if(!gator_spawned){
+          this.gator_location = pickCave();
+          caves.get(this.gator_location).gator_present = true;
+          gator_spawned = true;
+        }
+        else if(gator_spawned){
+          caves.get(this.gator_location).gator_present = false;
+          gator_spawned = false;
+        }
+        this.gator_ticker = 0;
+      }
     }
     this.poorfrog_spawned = this.car_manager.poorfrogExist();
     if(!this.poorfrog_spawned){
@@ -119,6 +148,9 @@ class Map{
       if(caves.get(x).fly_present){
         g.drawImage(fly_image, caves.get(x).getX(), caves.get(x).getY(), null);
       }
+      if(caves.get(x).gator_present){
+        g.drawImage(gator_image, caves.get(x).getX()-50, caves.get(x).getY(), null);
+      }
     }
     car_manager.drawMotorVehicles(g);
   }
@@ -127,6 +159,7 @@ class Map{
 class Cave{
   private boolean occupied = false;
   public boolean fly_present = false;
+  public boolean gator_present = false;
   private Rectangle hitbox;
   private int x,y;
 

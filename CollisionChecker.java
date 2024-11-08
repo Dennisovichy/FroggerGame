@@ -56,7 +56,7 @@ class CollisionChecker{
     }
     Rectangle frogbox = frog.getSmallbox();
     for(int i = 0; i<5; i++){
-      if(!caves.get(i).getOccupied()){
+      if(!caves.get(i).getOccupied() && caves.get(i).gator_present==false){
         if(frogbox.intersects(caves.get(i).getHitbox())){
           leveling.addScore(300);
           if(caves.get(i).fly_present){

@@ -1,11 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.ArrayList;
 import javax.swing.*;
-import java.awt.image.*; 
-import java.io.*; 
-import javax.imageio.*; 
-import java.util.ArrayList; 
-import java.awt.geom.*;
 
 public class FroggerGame extends JFrame{
  GamePanel game= new GamePanel();
@@ -40,6 +37,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  private ArrayList<Map> maps;
  public int lives;
  public int score;
+ public int accum_score;
  File fntFile = new File("VCR_OCD_MONO_1.001.ttf");
  Font score_font = new Font("Comic Sans MS", Font.PLAIN, 30);
  
@@ -83,7 +81,8 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   Map map3 = new Map(4,car_manager, car_spawner3,true);
   lives = 5;
   score = 0;
-  int[] data_go = {lives,score};
+  accum_score = 0;
+  int[] data_go = {lives,score, accum_score};
 
   maps = new ArrayList<Map>();
   maps.add(map1);
@@ -106,8 +105,14 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   }
   else if(screen == GAME){
    level1.update(keys, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN);
+   if(level1.checkDead()){
+    int[] data_go = {5,0,0};
+    levelnum = 0;
+    level1 = new Level(maps.get(levelnum),data_go);
+    level1.clearLevel();
+   }
    if(level1.checkClear()){
-    int[] data_go = {level1.getLives(),level1.getScore()};
+    int[] data_go = {level1.getLives(),level1.getScore(),level1.getAccumScore()};
     levelnum++;
     level1.clearHazards();
     level1 = new Level(maps.get(levelnum),data_go);
@@ -175,6 +180,7 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
    g.setColor(new Color(255,255,255));
    g.setFont(score_font);
    g.drawString("Score:"+level1.getScore(), 600, 775);
+   level1.draw_bar(g);
    //Graphics2D g2 = (Graphics2D)g;
    //g2.draw(ball.getHitbox());
    //System.out.println(car_manager.getMotorVehicle(0).getHitbox().height);

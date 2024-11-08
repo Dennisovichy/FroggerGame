@@ -53,6 +53,7 @@ class Frog{
     return temp;
   }
 
+  public int getX(){return this.x;}
   public int getY(){return this.y;}
 
   public void draw(Graphics g){
