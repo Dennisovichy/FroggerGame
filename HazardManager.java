@@ -1,3 +1,7 @@
+//HazardManager.java
+//Dennis Qi
+//Class that manages all of the moving objects, not just the hazards. Provides many methods to access the objects
+
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -49,7 +53,7 @@ class HazardManager{
     for(int i = 0; i < vehicles_list.size(); i++){
       vehicles_list.get(i).move();
     }
-    for(int x = 0; x < vehicles_list.size(); x++){
+    for(int x = 0; x < vehicles_list.size(); x++){ //if out of bounds, delete it
       if(vehicles_list.get(x).checkBounds()){
         vehicles_list.remove(x);
         x = 0;
@@ -57,7 +61,7 @@ class HazardManager{
     }
   }
 
-  public boolean poorfrogExist(){
+  public boolean poorfrogExist(){ //if the rescuable frog exists on the map, then return true
     for(int i = 0; i < vehicles_list.size(); i++){
       if(vehicles_list.get(i).isFrog()){
         return true;
@@ -68,8 +72,8 @@ class HazardManager{
   
   public void drawMotorVehicles(Graphics g){
     for(int i = 0; i < vehicles_list.size(); i++){
-      
-      g.drawImage(vehicles_list.get(i).getImage(), vehicles_list.get(i).getX(), vehicles_list.get(i).getY(), null);
+      vehicles_list.get(i).draw(g);
+      //g.drawImage(vehicles_list.get(i).getImage(), vehicles_list.get(i).getX(), vehicles_list.get(i).getY(), null);
       g.setColor(Color.RED);
       //Graphics2D g2 = (Graphics2D)g;
       //g2.draw(vehicles_list.get(i).getHitbox());

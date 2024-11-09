@@ -21,8 +21,11 @@ public class FroggerGame extends JFrame{
 }
 
 class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
- public static final int INTRO=0, GAME=1, END=2;
+ public static final int INTRO=0, GAME=1, END=2, TRANSITION=3;
  private int screen = INTRO;
+ private Image title = new ImageIcon("title.png").getImage();
+ private Image transition = new ImageIcon("transition.png").getImage();
+ private Image gameover = new ImageIcon("gameover.png").getImage();
  public static final int lanes_wide = 16;
  public static final int lanes_tall = 15;
  
@@ -53,42 +56,43 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   ball = new Frog();
   car_manager = new HazardManager();
   
-  int[] lanes = {2,3,4,5,7};
-  int[][] delays = {{300},{120},{400},{80}, {20,60}};
-  int[] types = {0,0,0,0, 1};
-  int[] directions = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
-  boolean[] logs = {true, false,true,false, false};
-  boolean[] turts = {false,true,false,false,false};
+  //initialize all of the levels
+  int[] lanes = {2,3,4,6,7,10};
+  int[][] delays = {{300},{120},{300},{80}, {20,60},{50}};
+  int[] types = {0,0,0,0, 1,0};
+  int[] directions = {MotorVehicle.RIGHT,MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT, MotorVehicle.LEFT};
+  boolean[] logs = {true, false,true,false, false,false};
+  boolean[] turts = {false,true,false,false,false,false};
   HazardSpawner car_spawner = new HazardSpawner(lanes, delays, types, directions, car_manager, logs, turts);
   Map map1 = new Map(4,car_manager, car_spawner,false);
 
-  int[] lanes2 = {2,3,4,5,7};
-  int[][] delays2 = {{300},{120},{400},{80}, {20,60}};
-  int[] types2 = {0,0,0,0, 1};
-  int[] directions2 = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
-  boolean[] logs2 = {true, false,true,false, false};
-  boolean[] turts2 = {false,true,false,false,false};
+  int[] lanes2 = {2,3,4,5,7,8,9,11};
+  int[][] delays2 = {{100},{120},{300},{300},{60},{60},{200},{20,20,20,20,20,300}};
+  int[] types2 = {0,1,2,0, 0,0,1,3};
+  int[] directions2 = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT,MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
+  boolean[] logs2 = {false, true,true,true,false,false,false,false};
+  boolean[] turts2 = {true,false,false,false,false,false,false,false};
   HazardSpawner car_spawner2 = new HazardSpawner(lanes2, delays2, types2, directions2, car_manager, logs2, turts2);
-  Map map2 = new Map(4,car_manager, car_spawner2,true);
+  Map map2 = new Map(5,car_manager, car_spawner2,true);
 
-  int[] lanes3 = {2,3,4,5,7};
-  int[][] delays3 = {{300},{120},{400},{80}, {20,60}};
-  int[] types3 = {0,0,0,0, 1};
-  int[] directions3 = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT};
-  boolean[] logs3 = {true, false,true,false, false};
-  boolean[] turts3 = {false,true,false,false,false};
+  int[] lanes3 = {2,3,4,5,6,7,9,10,11,12};
+  int[][] delays3 = {{300},{120},{400},{80}, {130},{200},{200},{200},{70},{100}};
+  int[] types3 = {0,0,0,0,0,0,1,2,3,0};
+  int[] directions3 = {MotorVehicle.RIGHT,MotorVehicle.LEFT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT, MotorVehicle.LEFT,MotorVehicle.LEFT,MotorVehicle.LEFT, MotorVehicle.RIGHT, MotorVehicle.LEFT};
+  boolean[] logs3 = {true, false,true,false, false,true,false,false,false,false};
+  boolean[] turts3 = {false,true,false,true,true,false,false,false,false,false};
   HazardSpawner car_spawner3 = new HazardSpawner(lanes3, delays3, types3, directions3, car_manager, logs3, turts3);
-  Map map3 = new Map(4,car_manager, car_spawner3,true);
+  Map map3 = new Map(7,car_manager, car_spawner3,true);
   lives = 5;
   score = 0;
   accum_score = 0;
-  int[] data_go = {lives,score, accum_score};
+  int[] data_go = {lives,score, accum_score}; //this is just stupid. array is for transferring data between levels
 
   maps = new ArrayList<Map>();
   maps.add(map1);
   maps.add(map2);
   maps.add(map3);
-  level1 = new Level(maps.get(levelnum), data_go);
+  level1 = new Level(maps.get(levelnum), data_go); //level1 is the current level, not specifically level1.
   
   setPreferredSize(new Dimension(800, 780));
   setFocusable(true);
@@ -105,17 +109,28 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   }
   else if(screen == GAME){
    level1.update(keys, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP, KeyEvent.VK_DOWN);
-   if(level1.checkDead()){
-    int[] data_go = {5,0,0};
-    levelnum = 0;
+   if(level1.checkDead()){ //if die
+    int[] data_go = {5,0,0}; //reset datas
+    levelnum = 0; //reset map
     level1 = new Level(maps.get(levelnum),data_go);
     level1.clearLevel();
+    screen = END;
    }
    if(level1.checkClear()){
-    int[] data_go = {level1.getLives(),level1.getScore(),level1.getAccumScore()};
+    int[] data_go = {level1.getLives(),level1.getScore(),level1.getAccumScore()}; //get the data from the previous level
     levelnum++;
     level1.clearHazards();
-    level1 = new Level(maps.get(levelnum),data_go);
+    if(levelnum==maps.size()){ //if the map list is out, end the game
+      int[] data_new = {5,0,0};
+      levelnum = 0;
+      level1 = new Level(maps.get(levelnum),data_new);
+      level1.clearLevel();
+      screen = END;
+    }
+    else{ //else, go to the next level
+      level1 = new Level(maps.get(levelnum),data_go);
+      screen = TRANSITION;
+    }
    }
   }
 
@@ -156,6 +171,12 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
   if(screen == INTRO){
    screen = GAME;
   } 
+  if(screen == TRANSITION){
+   screen = GAME;
+  } 
+  if(screen == END){
+   screen = GAME;
+  } 
  }
 
  @Override
@@ -164,26 +185,27 @@ class GamePanel extends JPanel implements KeyListener, ActionListener, MouseList
  @Override
  public void paint(Graphics g){
   if(screen == INTRO){
-   g.setColor(new Color(0,0,0));
-   g.fillRect(0,0,getWidth(), getHeight());     
+   g.drawImage(title, 0, 0, null);   
+  }
+  else if(screen == TRANSITION){
+    g.drawImage(transition,0,0,null);
+  }
+  else if(screen == END){
+    g.drawImage(gameover,0,0,null);
   }
   else if(screen == GAME){
-   // The last parameter is an ImageObserver. Back when images were not loaded
-   // right away you would specify what object would be notified when it was loaded.
-   // We are not doing that, so null will always be fine.
-   level1.draw(g);
+  
+   level1.draw(g); //draw map and player
    g.setColor(new Color(0,0,0));
-   g.fillRect(0, 750, 9000, 100);
-   for(int i = 0; i<level1.getLives(); i++){
+   g.fillRect(0, 750, 9000, 100); //draw black bar at the bottom
+   for(int i = 0; i<level1.getLives(); i++){ //draw how many lives you have
     g.drawImage(frog_icon, 50+i*40, 752, null);
    }
    g.setColor(new Color(255,255,255));
-   g.setFont(score_font);
+   g.setFont(score_font); //draw score
    g.drawString("Score:"+level1.getScore(), 600, 775);
-   level1.draw_bar(g);
-   //Graphics2D g2 = (Graphics2D)g;
-   //g2.draw(ball.getHitbox());
-   //System.out.println(car_manager.getMotorVehicle(0).getHitbox().height);
+   level1.draw_bar(g); //draw the timer that shows how much time you have left
+   
   }
     }
 }

@@ -1,3 +1,7 @@
+//Level.java
+//Dennis Qi
+//Overall class for the management of levels and interactions between the player and map
+
 import java.awt.*;
 
 class Level{
@@ -6,7 +10,7 @@ class Level{
     private int lives;
     private int score;
     private int accum_score;
-    private int max_time = 2800;
+    private int max_time = 1800;
     private int ticker = max_time;
 
     public Level(Map layout, int[] data){
@@ -17,21 +21,23 @@ class Level{
         this.accum_score = data[2];
     }
 
-    public void update(boolean[] keys, int left, int right, int up, int down){
+    public void update(boolean[] keys, int left, int right, int up, int down){ //update the level
         this.ball.move(keys, left, right, up, down);
         this.level_map.updateMap();
         this.score += this.ball.getPoints();
         CollisionChecker.checkRescue(ball, level_map.getHazards());
-        if(CollisionChecker.checkSafe(ball, this.level_map.getCaves(),this)){
+        if(CollisionChecker.checkSafe(ball, this.level_map.getCaves(),this)){ //check if player collides with things. most of the time this results in death
             this.ball = new Frog();
             this.ticker = this.max_time;
         }
         if(CollisionChecker.checkDrown(ball, level_map, level_map.getHazards())){
+            this.level_map.addCorpse(ball.getX(), ball.getY(), true);
             this.ball = new Frog();
             this.lives--;
             this.ticker = this.max_time;
         }
         if(CollisionChecker.checkCollision(this.ball, this.level_map.getHazards())){
+            this.level_map.addCorpse(ball.getX(), ball.getY(), false);
             this.ball = new Frog();
             this.lives--;
             this.ticker = this.max_time;
@@ -54,6 +60,7 @@ class Level{
     }
     public void clearLevel(){
         this.level_map.clearCaves();
+        this.level_map.clearCorpses();
         this.level_map.getHazards().clearMotorVehicles();
     }
 
@@ -74,6 +81,7 @@ class Level{
 
     public void draw(Graphics g){
         this.level_map.drawMap(g);
+        this.level_map.drawCars(g);
         this.ball.draw(g);
     }
 

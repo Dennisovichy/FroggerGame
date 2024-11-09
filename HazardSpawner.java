@@ -1,3 +1,7 @@
+//HazardSpawner.java
+//Dennis Qi
+//Responsible for spawning all of the objects that come from the side of the screen
+
 import java.util.*;
 
 class HazardSpawner{
@@ -28,7 +32,7 @@ class HazardSpawner{
 
   public int[] getCarLanes(){return this.lanes;}
 
-  public int pickLoglane(){
+  public int pickLoglane(){ //randomly pick a log lane to spawn frogs on it
     ArrayList<Integer> options = new ArrayList<Integer>();
     for(int i = 0; i<this.loglanes.length;i++){
       if(this.loglanes[i] == true){
@@ -39,7 +43,7 @@ class HazardSpawner{
     return options.get(r.nextInt(0, options.size()));
   }
 
-  public void SpawnFrog(){
+  public void SpawnFrog(){ //set up the spawning of the frog
     this.wantspawnfrog = true;
     this.frogspawnlane = pickLoglane();
   }
@@ -47,15 +51,15 @@ class HazardSpawner{
   public void update(){
     Random r = new Random();
     int x_pos = -200;
-    for(int i = 0; i < this.lanes.length; i++){
-      if(this.timers[i] == 0){
-        if(this.directions[i] == MotorVehicle.LEFT){
+    for(int i = 0; i < this.lanes.length; i++){//for every lane...
+      if(this.timers[i] == 0){ //is it time to spawn a car?
+        if(this.directions[i] == MotorVehicle.LEFT){ //check where to spawn it
           x_pos = 1000;
         }
         else if(this.directions[i] == MotorVehicle.RIGHT){
           x_pos = -300;
         }
-        if(this.loglanes[i]){
+        if(this.loglanes[i]){ //if it's a log lane, spawn a log and if the loglane satisfies the conditions then also spawn a frog
           manager.addLog(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
           if(wantspawnfrog){
             if(i == frogspawnlane){
@@ -64,17 +68,17 @@ class HazardSpawner{
             }
           }
         }
-        else if(this.turtlanes[i]){
+        else if(this.turtlanes[i]){ //if turtle lane, spawn turtle
           manager.addTurt(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
         }
-        else{
+        else{ //else spawn a regular car
           manager.addMotorVehicle(this.enemy_types[i], x_pos, (this.lanes[i] * 50 - 50), this.directions[i]);
         }
-        this.delay_positions[i] = Helper.advanceArray(this.delays[i], this.delay_positions[i]);
-        if(this.loglanes[i]){
-          this.timers[i] = (int)(this.delays[i][this.delay_positions[i]]*(1-r.nextDouble(0.5)));
+        this.delay_positions[i] = Helper.advanceArray(this.delays[i], this.delay_positions[i]); //move up the list of delays
+        if(this.loglanes[i]){ //logs have random delays
+          this.timers[i] = (int)(this.delays[i][this.delay_positions[i]]*(1-r.nextDouble(0.7)));
         }
-        else{
+        else{ 
           this.timers[i] = this.delays[i][this.delay_positions[i]];
         }
       }
